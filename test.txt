@@ -1,0 +1,96 @@
+#include <iostream> 
+
+
+
+#include <fstream>
+
+#ifdef _WIN32  
+  #include "windows.h"
+#endif 
+
+bool Commit1(char a, char b)
+{
+    return a == '*' && b == '/';
+}
+
+bool Commit2(char a, char b)
+{
+    return a == '/' && b == '/';
+}
+
+
+
+int main()
+{
+#ifdef _WIN32
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+#endif 
+
+    std::ifstream in;
+    in.open("WriteThisFile.cpp");
+    if (!in.is_open())
+    {
+        std::cout << "К сожалению не удалось открыть файл,назовите файл WriteThisFile.cpp попробуйте еще раз запустить программу";
+    } 
+    char test[2]{'0', '0'};
+    
+    std::string text;
+    in.get(test[1]);
+    in.get(test[1]);
+    in.get(test[1]);
+    in.get(test[1]);
+    test[0] = test[1];
+    while (!in.eof())
+    {
+        
+        in.get(test[1]);
+        if (!Commit1(test[1], test[0]) && !Commit2(test[1], test[0]))
+        {
+            
+            text.push_back(test[0]);
+            test[0] = test[1];
+        }
+        else
+        {
+            if (Commit1(test[1], test[0]))
+            {
+                while (test[1] != '/' && test[0] != '*' && !in.eof())
+                {
+                    in.get(test[1]);
+                    test[0] = test[1];
+                    
+                }
+                in.get(test[1]);
+                in.get(test[1]);
+                test[0] = test[1];
+            }
+            else
+            {
+                while (test[1] != '\n' && !in.eof())
+                {
+                    in.get(test[1]);
+                    test[0] = test[1];
+                }
+            }
+        }
+    }
+    std::ofstream out;
+    out.open("test.txt");
+    out << text;
+    out.close();
+    std::cout << text;
+    in.close();
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+

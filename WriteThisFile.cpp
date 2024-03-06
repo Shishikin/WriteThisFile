@@ -1,12 +1,23 @@
-﻿// WriteThisFile.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
+#include <iostream> 
 
-#include <iostream>
+
+
 #include <fstream>
 
-#ifdef _WIN32  
-  #include "windows.h"
-#endif 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+bool Commit1(char a, char b)
+{
+    return a == '*' && b == '/';
+}
+
+bool Commit2(char a, char b)
+{
+    return a == '/' && b == '/';
+}
+
 
 
 int main()
@@ -14,34 +25,75 @@ int main()
 #ifdef _WIN32
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-#endif 
+#endif
 
     std::ifstream in;
-    in.open("WriteThisFile.cpp");
+    std::string name;
+    std::cout << "Введите название файла";
+    std::cin >> name;
+    in.open(name);
     if (!in.is_open())
     {
-        std::cout << "К сожалению не удалось открыть файл, попробуйте еще раз запустить программу";
+        std::cout << "К сожалению не удалось открыть файл,назовите файл WriteThisFile.cpp попробуйте еще раз запустить программу";
     } 
-    char test('0');
+    char test[2]{'0', '0'};
+    
     std::string text;
+    in.get(test[1]);
+    in.get(test[1]);
+    in.get(test[1]);
+    in.get(test[1]);
+    test[0] = test[1];
     while (!in.eof())
     {
-        in.get(test);
-        text.push_back(test);
+        
+        in.get(test[1]);
+        if (!Commit1(test[1], test[0]) && !Commit2(test[1], test[0]))
+        {
+            
+            text.push_back(test[0]);
+            test[0] = test[1];
+        }
+        else
+        {
+            if (Commit1(test[1], test[0]))
+            {
+                while (test[1] != '/' && test[0] != '*' && !in.eof())
+                {
+                    in.get(test[1]);
+                    test[0] = test[1];
+                    
+                }
+                in.get(test[1]);
+                in.get(test[1]);
+                test[0] = test[1];
+            }
+            else
+            {
+                while (test[1] != '\n' && !in.eof())
+                {
+                    in.get(test[1]);
+                    test[0] = test[1];
+                }
+            }
+        }
     }
+    std::ofstream out;
+    out.open("WithoutComments.cpp");
+    out << text;
+    out.close();
     std::cout << text;
     in.close();
-    std::cout << "Hello World!\n";
     return 0;
 }
 
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
 
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
+
+
+
+
+
+
+
+
+
